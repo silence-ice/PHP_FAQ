@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PHP☞SESSION机制</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #191970;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1>PHP☞SESSION机制</h1>
+<hr />
+<h2>SESSION存储机制</h2>
+<blockquote>
+<p>1.PHP默认是以文件的形式存储SESSION数据信息。<br />
+2.存储机制可以通过php.ini进行修改成数据库存储/Redis存储等。  
+</p>
+</blockquote>
+<h2>SESSION在WebServer和Client存储形式</h2>
+<blockquote>
+<p>1.SESSION在Client浏览器就存储了一个SESSION_ID。每当打开一个浏览器在其内存中会生成一个全局唯一的SESSION_ID；关闭浏览器SESSION_ID销毁。<br />
+2.SESSION在WebServer端默认是以文件形式存储，文件名形如:sess_01aab840166fd1dc253e3b4a3f0b8381，每一个文件对应一个会话。<br />
+3.Client与Server端进行交互时，默认是在请求头携带COOKIE，COOKIE包含SESSION_ID。当然也可以通过URL形式和SERVER交互，形如:index.php?PHPSESID=01aab840166fd1dc253e3b4a3f0b8381</p>
+</blockquote>
+<h2>session_start()的内部操作不简单！！</h2>
+<blockquote>
+<p>1.执行session_start()后，session机制就开始了，它有一定概率开启垃圾回收。开始如下操作：  
+</p>
+<blockquote>
+<p>1.告诉服务器赶快把对应的SESSION文件给反序列化了，老子准备读数据！别偷懒~！<br />
+2.服务器找到浏览器传过来的SESSION_ID，然后去session.save_path指定的文件夹里去找名字为'SESS_'.session_id()的文件.读取文件的内容反序列化，然后放到$_SESSION中。    
+</p>
+</blockquote>
+<p>2.【注意】：只有一个session相关函数可以在session_start()之前执行，就是获取SESSION_ID的session_name()</p>
+</blockquote>
+<h2>SESSION赋值</h2>
+<blockquote>
+<p>1.比如进行如$_SESSION['silence'] ='Hello World'; 那么这个SESSION只会维护在内存中，当脚本执行结束的时候，会把对应的SESSION的值写入到session_id指定的文件夹中，然后关闭相关资源。<br />
+2.在脚本结束的时候会执行SESSION写入操作，把$_SESSION中值写入到session_id命名的文件中，如果不存在则创建之，最后将数据序列化之后写入文件。</p>
+</blockquote>
+<h2>SESSION回收机制:</h2>
+<blockquote>
+<p>回收机制原理：  
+</p>
+<blockquote>
+<p>当php每发出一次请求时,会有一定的概率触发&quot;session回收&quot;,此时会检查SESSION存储的文件，若修改时间超过了gc_maxlifetime的值,就将其删除。  
+</p>
+</blockquote>
+<p>回收概率如何计算：  
+</p>
+<blockquote>
+<p>回收概率是gc_probability/gc_divisor；在php.ini文件可以看到session.gc_probability和session.gc_divisor的值。  
+</p>
+</blockquote>
+</blockquote>
+<h2>SESSION机制实操案例</h2>
+<blockquote>
+<p>1.在第一次用浏览器登录代理商的时候，因为没session_id，所以在/tmp下产生了该文件：<br />
+1<br />
+2.进行页面代理商登录操作之后呢，该文件里面会产生对应的session内容：<br />
+1<br />
+3.对该火狐浏览器再进行eflydns网站登录的时候呢，该文件会增加eflydns的session内容：<br />
+1<br />
+4.当使用<strong>另外一个浏览器</strong>的时候打开代理商呢，会产生另外一个session文件：<br />
+1<br />
+5.因为浏览器的session_id是保存在内存中的，当关闭浏览器的时候session_id会丢失。当再次打开该浏览器进入代理商网页的时候，会产生新的session文件:<br />
+1  
+</p>
+</blockquote>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
